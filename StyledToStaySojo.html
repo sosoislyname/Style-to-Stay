@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Styled to Stay: Digital Doll Try-On</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{--cream:#efe8d8;--paper:#e5dac6;--butter:#ede6c5;--navy:#665f1e;--ink:#1d1c1c;--grey:#473424;--line:#cdbca1;--stone:#70706e;--terracotta:#b24e3d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Newsreader,'Source Serif 4',Georgia,serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:flex-end;padding:22px 32px 14px;border-bottom:1px solid var(--navy)}
+header h1{margin:0;font-weight:400;font-size:40px;line-height:1.1;color:var(--ink);font-family:Helvetica,Arial,sans-serif}
+.sub{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey)}
+main{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:28px;padding:24px 32px;max-width:1240px;margin:0 auto}
+.left{display:flex;flex-direction:column;gap:14px}
+#stage{background:var(--paper);border:1px solid var(--line);position:relative;display:flex;justify-content:center;align-items:center;padding:12px 12px 34px;min-height:580px;transition:box-shadow .2s}
+#stage.over{box-shadow:inset 0 0 0 2px var(--navy)}
+#doll{width:100%;max-width:340px;height:auto;display:block}
+#doll .worn{cursor:pointer;animation:puton .35s ease-out both;transform-box:fill-box;transform-origin:center}
+@keyframes puton{from{opacity:0;transform:translateY(-10px) scale(1.02)}to{opacity:1;transform:none}}
+.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--grey);font-style:italic}
+.wearing{background:var(--paper);border:1px solid var(--line);padding:12px 14px;font-size:13px;line-height:1.6;min-height:52px}
+.wearing b{font-weight:400;letter-spacing:2px;text-transform:uppercase;font-size:11px;color:var(--navy)}
+.looks{display:flex;flex-wrap:wrap;gap:8px}
+.looks button{font-size:11px;padding:7px 10px}
+.panel h2{margin:0 0 4px;font-weight:400;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--navy)}
+.panel p.lead{margin:0 0 6px;font-size:15px;color:var(--grey)}
+.cat{margin:24px 0 8px;font-size:12px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--grey)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;background:var(--stone);padding:12px}
+.card{background:var(--butter);border:1px solid var(--line);padding:10px 8px 10px;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .2s ease,box-shadow .2s ease,background .2s;animation:fadein .4s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-2px);outline:1px solid var(--ink)}
+.card.on{background:var(--ink);color:var(--cream)}
+.card.on svg{background:var(--cream)}
+.card.on .brand{color:var(--butter)}
+.card svg{width:100%;height:96px;pointer-events:none;background:var(--paper);padding:6px;box-sizing:border-box}
+.card .brand{font-size:11px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);text-align:center}
+.card .num{align-self:flex-start;font-size:12px;letter-spacing:.05em;color:var(--grey)}
+.card .n{font-size:12px;text-align:center;line-height:1.2}
+.card .fit{font-size:10px;font-style:italic;opacity:.7}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+button,select{font-family:inherit;font-size:12px;letter-spacing:2px;text-transform:uppercase;background:transparent;border:1px solid var(--navy);color:var(--navy);padding:9px 14px;cursor:pointer;transition:background .2s,color .2s}
+button:hover{background:var(--navy);color:var(--cream)}
+button.solid{background:var(--navy);color:var(--cream)}
+select:disabled{opacity:.5;cursor:not-allowed}
+.ghost{position:fixed;pointer-events:none;z-index:50;width:110px;height:110px;opacity:.9;transform:translate(-50%,-50%) rotate(-4deg)}
+.note{font-size:12px;color:var(--grey);margin-top:14px;line-height:1.5}
+@media (max-width:780px){main{grid-template-columns:1fr}}
+#gate{position:fixed;inset:0;z-index:100;background:var(--cream);display:flex;align-items:center;justify-content:center;padding:24px}
+#gate .box{background:var(--paper);border:1px solid var(--line);padding:48px 40px;max-width:420px;width:100%;text-align:center}
+#gate .eyebrow{font-size:12px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--grey);margin-bottom:12px}
+#gate h2{margin:0 0 24px;font-weight:400;font-size:40px;line-height:1.1;font-family:Helvetica,Arial,sans-serif;color:var(--ink)}
+#gate input{font-family:inherit;font-size:16px;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:2px;background:var(--cream);color:var(--ink);margin-bottom:12px}
+#gate input:focus{outline:2px solid var(--ink);outline-offset:2px}
+#gate button{width:100%;background:var(--navy);color:var(--cream)}
+#gate .err{min-height:20px;font-size:13px;color:var(--terracotta);margin-top:10px}
+#gate .foot{margin-top:24px;font-size:12px;color:var(--grey)}
+body.locked main,body.locked header{visibility:hidden}
+</style>
+</head>
+<body class="locked">
+<div id="gate" role="dialog" aria-label="Enter password">
+<form class="box" id="gateform">
+<div class="eyebrow">Styled to Stay · prototype</div>
+<h2>Private preview<span style="color:var(--terracotta)">.</span></h2>
+<label for="pw" class="eyebrow" style="display:block;text-align:left;margin-bottom:6px">Password</label>
+<input id="pw" type="password" autocomplete="current-password" autofocus>
+<button type="submit">Enter</button>
+<div class="err" id="gateerr" aria-live="polite"></div>
+<div class="foot">Solène Gillier · London College of Fashion, UAL</div>
+</form>
+</div>
+<script>
+(function(){
+const HASH='1dc32lwdpl8';
+const cyrb53=(str,seed=7)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);};
+const open=()=>{document.getElementById('gate').remove();document.body.classList.remove('locked');};
+try{if(sessionStorage.getItem('sts-ok')===HASH){open();return;}}catch(e){}
+document.getElementById('gateform').addEventListener('submit',e=>{e.preventDefault();
+ const v=document.getElementById('pw').value;
+ if(cyrb53(v)===HASH){try{sessionStorage.setItem('sts-ok',HASH);}catch(e){} open();}
+ else{document.getElementById('gateerr').textContent='That password is not right. Please try again.';}
+});
+})();
+</script>
+<header>
+<div><div class="sub">Styled to Stay · prototype</div><h1>Digital doll try-on<span style="color:var(--terracotta)">.</span></h1></div>
+<div class="sub">Display version</div>
+</header>
+<main>
+<div class="left">
+<section id="stage" aria-label="Doll: drop clothes here">
+<svg id="doll" viewBox="0 0 300 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fashion doll">
+<defs>
+<linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#C68C66"/><stop offset=".45" stop-color="#DEAC86"/><stop offset=".55" stop-color="#DEAC86"/><stop offset="1" stop-color="#C68C66"/></linearGradient>
+<linearGradient id="wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C3445"/><stop offset=".55" stop-color="#46536B"/><stop offset="1" stop-color="#262C39"/></linearGradient>
+<linearGradient id="hairg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5E3F27"/><stop offset="1" stop-color="#8E6741"/></linearGradient>
+<linearGradient id="satin" x1="0" x2="1"><stop offset="0" stop-color="#E2D3AE"/><stop offset=".4" stop-color="#F4ECD6"/><stop offset=".6" stop-color="#E9DDBC"/><stop offset="1" stop-color="#D9C79C"/></linearGradient>
+<linearGradient id="ivory" x1="0" x2="1"><stop offset="0" stop-color="#E9E4D8"/><stop offset=".35" stop-color="#FFFDF7"/><stop offset=".55" stop-color="#F3EEE2"/><stop offset="1" stop-color="#DED8CA"/></linearGradient>
+<linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2F2F2"/><stop offset=".4" stop-color="#A9A9AD"/><stop offset=".6" stop-color="#E6E6E8"/><stop offset="1" stop-color="#8E8E92"/></linearGradient>
+<linearGradient id="blacksatin" x1="0" x2="1"><stop offset="0" stop-color="#121214"/><stop offset=".45" stop-color="#2A2A2E"/><stop offset=".6" stop-color="#161618"/><stop offset="1" stop-color="#0E0E10"/></linearGradient>
+<pattern id="snake" width="10" height="8" patternUnits="userSpaceOnUse"><rect width="10" height="8" fill="#CFC5A8"/><path d="M0,4 Q2.5,0 5,4 Q7.5,8 10,4" fill="#6A5E46"/><ellipse cx="5" cy="4" rx="1.6" ry="1.1" fill="#E8E0C8"/></pattern>
+<pattern id="cord" width="4" height="10" patternUnits="userSpaceOnUse"><rect width="4" height="10" fill="#7A5230"/><rect width="1.4" height="10" fill="#6A4626"/></pattern>
+</defs>
+<ellipse cx="150" cy="674" rx="66" ry="6" fill="#000" opacity=".07"/>
+<path d="M117,78 C114,42 134,34 150,34 C172,34 188,44 185,80 L190,126 C168,134 132,134 110,126 Z" fill="url(#hairg)"/>
+<g fill="url(#skin)">
+<rect x="141" y="110" width="18" height="50" rx="8"/>
+<path d="M104,164 C93,170 91,186 91,204 C89,240 86,270 84,300 C82,330 82,350 82,374 L95,376 C97,350 99,330 103,300 C107,270 111,240 113,210 Z"/>
+<path d="M196,164 C207,170 209,186 209,204 C211,240 214,270 216,300 C218,330 218,350 218,374 L205,376 C203,350 201,330 197,300 C193,270 189,240 187,210 Z"/>
+<ellipse cx="88.5" cy="390" rx="8" ry="15"/>
+<ellipse cx="211.5" cy="390" rx="8" ry="15"/>
+<path d="M100,166 C106,156 128,152 150,152 C172,152 194,156 200,166 C202,190 194,210 190,226 C184,248 178,262 178,272 C180,296 192,318 192,340 C193,352 190,362 186,368 L114,368 C110,362 107,352 108,340 C108,318 120,296 122,272 C122,262 116,248 110,226 C106,210 98,190 100,166 Z"/>
+<path d="M109,346 C107,400 117,450 121,500 C123,540 126,600 131,642 L147,642 C148,600 148,540 148,500 C149,450 152,400 150,364 Z"/>
+<path d="M191,346 C193,400 183,450 179,500 C177,540 174,600 169,642 L153,642 C152,600 152,540 152,500 C151,450 148,400 150,364 Z"/>
+<path d="M131,640 L147,640 C148,652 147,664 142,668 C134,670 124,668 124,664 C124,656 129,650 131,640 Z"/>
+<path d="M169,640 L153,640 C152,652 153,664 158,668 C166,670 176,668 176,664 C176,656 171,650 169,640 Z"/>
+<ellipse cx="150" cy="82" rx="29" ry="38"/>
+</g>
+<g>
+<path d="M128,74 Q136,70 144,73" stroke="#4A3220" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M156,73 Q164,70 172,74" stroke="#4A3220" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M129,87 Q137,81 145,86 Q137,91 129,87 Z" fill="#fff"/>
+<path d="M155,86 Q163,81 171,87 Q163,91 155,86 Z" fill="#fff"/>
+<circle cx="137" cy="86.5" r="3.4" fill="#5A3A22"/><circle cx="163" cy="86.5" r="3.4" fill="#5A3A22"/>
+<circle cx="137" cy="86.5" r="1.4" fill="#1A1A1A"/><circle cx="163" cy="86.5" r="1.4" fill="#1A1A1A"/>
+<circle cx="138.2" cy="85.4" r=".8" fill="#fff"/><circle cx="164.2" cy="85.4" r=".8" fill="#fff"/>
+<path d="M128,86 Q137,79 146,85" stroke="#1A1A1A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M154,85 Q163,79 172,86" stroke="#1A1A1A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M150,91 Q148,98 146,101 Q150,103 153,101" stroke="#B07652" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+<path d="M141,110 Q145,106 150,108 Q155,106 159,110 Q155,116 150,116 Q145,116 141,110 Z" fill="#A65A54"/>
+<path d="M141,110 Q150,112 159,110" stroke="#7E3E3C" stroke-width=".9" fill="none"/>
+<ellipse cx="133" cy="98" rx="5" ry="3" fill="#D98C7A" opacity=".3"/><ellipse cx="167" cy="98" rx="5" ry="3" fill="#D98C7A" opacity=".3"/>
+</g>
+<path d="M119,84 C116,50 136,42 150,42 C174,42 186,56 182,80 C176,62 160,54 146,56 C132,60 124,74 126,106 C120,100 119,92 119,84 Z" fill="url(#hairg)"/>
+<g fill="#1C1C1C">
+<path d="M103,182 C130,177 170,177 197,182 L194,207 C170,203 130,203 106,207 Z"/>
+<path d="M112,330 C135,326 165,326 188,330 C190,344 190,356 186,366 C170,372 130,372 114,366 C110,356 110,344 112,330 Z"/>
+</g>
+<g id="layers"></g>
+</svg>
+<div class="hint">Drag a piece onto the doll, or tap it. Tap a piece on the doll to take it off.</div>
+</section>
+<div class="wearing" id="wearing"></div>
+<div class="looks" id="looks"></div>
+</div>
+
+<section class="panel">
+<h2>Your wardrobe</h2>
+<p class="lead">Pieces from any store, styled on one doll.</p>
+<div class="bar" style="margin-top:8px">
+<button class="solid" id="refresh">Refresh wardrobe</button>
+<button id="surprise">Style me</button>
+<button id="reset">Undress</button>
+<select disabled title="Coming in a future update"><option>Size: coming soon</option></select>
+</div>
+<div id="wardrobe"></div>
+<p class="note">Display prototype for the FMP concept. Brand names are placeholders for future partner brands. Coming in future updates: your own measurements and body shape, pieces dragged in from partner stores, and one tap to book a SOJO alteration.</p>
+</section>
+</main>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+const L=(d,f,extra='')=>`<path d="${d}" fill="${f}" ${extra}/>`;
+const sleeves=(f,extra='')=>L('M98,158 C86,166 84,186 84,210 L78,372 L98,376 L104,300 L112,214 Z',f,extra)+L('M202,158 C214,166 216,186 216,210 L222,372 L202,376 L196,300 L188,214 Z',f,extra);
+const beads=(n,cx,cy,rx,ry,start,end,fills,r)=>[...Array(n)].map((_,i)=>{const a=start+(end-start)*i/(n-1);return `<circle cx="${(cx+rx*Math.cos(a)).toFixed(1)}" cy="${(cy+ry*Math.sin(a)).toFixed(1)}" r="${r}" fill="${fills[i%fills.length]}"/>`}).join('');
+const ITEMS=[
+/* TOPS */
+{id:'skin',name:'Second-skin long sleeve',brand:'Atelier Nord',slot:'top',fit:'Fitted',z:10,svg:`<g>${L('M102,164 C128,154 172,154 198,164 C200,190 192,214 188,228 C182,250 178,262 178,272 C180,290 184,300 186,312 L114,312 C116,300 120,290 122,272 C122,262 118,250 112,228 C108,214 100,190 102,164 Z','#1E1E20')}${L('M104,164 C92,170 89,186 89,204 C87,240 84,270 82,300 C80,330 80,350 80,374 L97,376 C99,350 101,330 105,300 C109,270 113,240 115,210 Z','#1E1E20')}${L('M196,164 C208,170 211,186 211,204 C213,240 216,270 218,300 C220,330 220,350 220,374 L203,376 C201,350 199,330 195,300 C191,270 187,240 185,210 Z','#1E1E20')}<rect x="139" y="128" width="22" height="30" rx="7" fill="#1E1E20"/></g>`},
+{id:'vknit',name:'V-neck fine knit bodysuit',brand:'Nuit Studio',slot:'top',fit:'Fitted',z:10,svg:`<g>${L('M102,164 L136,156 L150,214 L164,156 L198,164 C200,190 192,214 188,228 C182,250 178,262 178,272 C180,290 184,300 186,312 L114,312 C116,300 120,290 122,272 C122,262 118,250 112,228 C108,214 100,190 102,164 Z','#141414')}${L('M104,164 C92,170 89,186 89,204 C87,240 84,270 82,300 C80,330 78,350 74,380 L98,380 C99,350 101,330 105,300 C109,270 113,240 115,210 Z','#141414')}${L('M196,164 C208,170 211,186 211,204 C213,240 216,270 218,300 C220,330 222,350 226,380 L202,380 C201,350 199,330 195,300 C191,270 187,240 185,210 Z','#141414')}</g>`},
+{id:'tee',name:'Ribbed baby tee',brand:'Studio Lune',slot:'top',fit:'Fitted',z:10,svg:`<g>${L('M102,164 C128,156 172,156 198,164 C200,190 192,214 188,228 C182,250 178,262 178,272 L180,300 L120,300 L122,272 C122,262 118,250 112,228 C108,214 100,190 102,164 Z','#F7F4EC','stroke="#DCD5C6"')}${L('M104,164 C94,170 90,186 90,200 L89,222 L112,226 L114,206 Z','#F7F4EC','stroke="#DCD5C6"')}${L('M196,164 C206,170 210,186 210,200 L211,222 L188,226 L186,206 Z','#F7F4EC','stroke="#DCD5C6"')}<path d="M132,156 Q150,170 168,156" stroke="#DCD5C6" fill="none"/></g>`},
+{id:'navytee',name:'Faded navy tee',brand:'Common Thread',slot:'top',fit:'Fitted',z:10,svg:`<g>${L('M102,164 C128,156 172,156 198,164 C200,190 194,214 190,230 C186,250 184,270 186,306 L114,306 C116,270 114,250 110,230 C106,214 100,190 102,164 Z','#262E48')}${L('M104,164 C94,170 90,186 90,200 L89,224 L112,228 L114,206 Z','#262E48')}${L('M196,164 C206,170 210,186 210,200 L211,224 L188,228 L186,206 Z','#262E48')}</g>`},
+{id:'tank',name:'Scoop tank',brand:'Maison Ode',slot:'top',fit:'Fitted',z:10,svg:`<g>${L('M100,166 L124,160 C132,186 168,186 176,160 L200,166 C202,190 194,212 190,228 C184,250 180,262 180,272 L182,305 L118,305 L120,272 C120,262 116,250 110,228 C106,212 98,190 100,166 Z','#FAF8F2','stroke="#DCD5C6"')}</g>`},
+{id:'shirt',name:'Oversized poplin shirt',brand:'Rêve Paris',slot:'top',fit:'Oversized',z:25,svg:`<g>${L('M96,160 C130,150 170,150 204,160 L214,350 C180,362 120,362 86,350 Z','#FBF9F4','stroke="#D8D2C6"')}${L('M98,162 C84,170 80,190 78,210 L70,374 L98,380 L104,300 L112,214 Z','#FBF9F4','stroke="#D8D2C6"')}${L('M202,162 C216,170 220,190 222,210 L230,374 L202,380 L196,300 L188,214 Z','#FBF9F4','stroke="#D8D2C6"')}<path d="M132,152 L150,170 L141,184 Z M168,152 L150,170 L159,184 Z" fill="#fff" stroke="#D8D2C6"/><path d="M150,170 L150,354" stroke="#E2DCD0"/></g>`},
+{id:'hoodie',name:'Boxy fleece hoodie',brand:'Haus Grey',slot:'top',fit:'Oversized',z:25,svg:`<g>${L('M94,160 C128,150 172,150 206,160 C212,220 214,280 212,330 C180,340 120,340 88,330 C86,280 88,220 94,160 Z','#9C9CA1')}${L('M88,318 C120,330 180,330 212,318 L212,336 C180,346 120,346 88,336 Z','#8B8B90')}${L('M96,162 C82,170 78,190 76,212 L72,360 C72,368 76,376 84,376 L100,374 C102,340 104,300 108,262 L114,214 Z','#9C9CA1')}${L('M204,162 C218,170 222,190 224,212 L228,360 C228,368 224,376 216,376 L200,374 C198,340 196,300 192,262 L186,214 Z','#9C9CA1')}${L('M122,158 C118,136 134,126 150,126 C166,126 182,136 178,158 C166,150 134,150 122,158 Z','#8B8B90')}<path d="M142,154 L140,196 M158,154 L160,196" stroke="#F3EEE3" stroke-width="1.6" stroke-linecap="round"/></g>`},
+{id:'knit',name:'Chunky cable knit',brand:'Olive & Oak',slot:'top',fit:'Oversized',z:25,svg:`<g>${L('M92,158 C128,148 172,148 208,158 C214,220 214,290 210,336 C180,346 120,346 90,336 C86,290 86,220 92,158 Z','#E4D6B8')}${L('M94,160 C80,168 76,190 74,212 L70,366 L100,372 L106,300 L114,214 Z','#E4D6B8')}${L('M206,160 C220,168 224,190 226,212 L230,366 L200,372 L194,300 L186,214 Z','#E4D6B8')}<path d="M134,160 C134,240 140,280 134,336 M166,160 C166,240 160,280 166,336" stroke="#CDBD99" stroke-width="5" fill="none" stroke-dasharray="7 4"/><rect x="130" y="140" width="40" height="16" rx="7" fill="#D8C9A8"/></g>`},
+/* DRESS */
+{id:'sculpt',name:'Sculptural wool coat-dress',brand:'Solenne Atelier*',slot:'dress',fit:'Sculpted',z:24,svg:`<g>${L('M108,150 C126,140 174,140 192,150 C196,190 190,230 182,262 C180,276 182,290 194,320 C204,350 200,372 186,386 C160,394 140,394 114,386 C100,372 96,350 106,320 C118,290 120,276 118,262 C110,230 104,190 108,150 Z','#EEE3A9')}${L('M106,156 C88,164 82,190 78,220 C72,280 66,330 58,392 C70,404 98,406 106,396 L108,300 L116,214 Z','#EEE3A9','stroke="#D9CB86" stroke-width=".8"')}${L('M194,156 C212,164 218,190 222,220 C228,280 234,330 242,392 C230,404 202,406 194,396 L192,300 L184,214 Z','#EEE3A9','stroke="#D9CB86" stroke-width=".8"')}${L('M130,150 L133,122 C142,118 158,118 167,122 L170,150 Z','#E6D99A')}<path d="M152,124 C150,200 158,260 150,300 C144,340 160,370 170,390" stroke="#D2C37E" stroke-width="1.2" fill="none"/></g>`},
+/* OUTERWEAR */
+{id:'blazer',name:'Sharp-shoulder satin blazer',brand:'Maison Ode',slot:'outer',fit:'Tailored',z:30,svg:`<g>${L('M94,154 L132,150 L150,232 L168,150 L206,154 C208,200 202,262 198,334 L102,334 C98,262 92,200 94,154 Z','url(#blacksatin)')}${sleeves('url(#blacksatin)')}<path d="M94,154 L112,151 M188,151 L206,154" stroke="#3A3A40" stroke-width="2"/><path d="M132,150 L144,206 L134,214 L118,160 Z M168,150 L156,206 L166,214 L182,160 Z" fill="#2E2E33"/></g>`},
+{id:'bomber',name:'Cropped leather bomber',brand:'Vesper London',slot:'outer',fit:'Cropped',z:30,svg:`<g>${L('M98,158 C128,148 172,148 202,158 C206,200 208,250 206,282 L94,282 C92,250 94,200 98,158 Z','#8E5C2F')}${L('M94,280 L206,280 L206,298 L94,298 Z','#4A3020')}${L('M98,160 C86,168 82,188 82,212 L78,356 L100,358 L104,300 L112,214 Z','#8E5C2F')}${L('M202,160 C214,168 218,188 218,212 L222,356 L200,358 L196,300 L188,214 Z','#8E5C2F')}<rect x="77" y="354" width="24" height="20" fill="#4A3020"/><rect x="199" y="354" width="24" height="20" fill="#4A3020"/>${L('M126,150 L174,150 L170,124 L130,124 Z','#7A4E28')}<path d="M150,128 L150,296" stroke="#5A3A1E" stroke-width="1.5"/><circle cx="138" cy="200" r="3" fill="#6E4422"/><circle cx="138" cy="240" r="3" fill="#6E4422"/><rect x="160" y="186" width="22" height="14" fill="none" stroke="#6E4422"/><path d="M104,200 Q118,230 112,270 M196,200 Q182,230 188,270" stroke="#A9733F" fill="none" opacity=".6"/></g>`},
+{id:'trench',name:'Belted trench coat',brand:'Vesper London',slot:'outer',fit:'Relaxed',z:30,svg:`<g>${L('M98,158 C128,148 172,148 202,158 C212,260 220,400 226,540 C190,550 110,550 74,540 C80,400 88,260 98,158 Z','#C9B08A')}${L('M100,160 C86,168 82,190 80,212 L74,372 L100,378 L106,300 L114,214 Z','#C2A881')}${L('M200,160 C214,168 218,190 220,212 L226,372 L200,378 L194,300 L186,214 Z','#C2A881')}<path d="M126,152 L150,210 L134,214 L114,168 Z M174,152 L150,210 L166,214 L186,168 Z" fill="#B99D74"/><path d="M150,210 L150,544" stroke="#A88C64"/>${L('M92,266 C130,276 170,276 208,266 L209,280 C170,290 130,290 91,280 Z','#B3976E')}</g>`},
+/* BOTTOMS */
+{id:'trousers',name:'Wide pleated trousers',brand:'Atelier Nord',slot:'bottom',fit:'Wide',z:20,svg:`<g><path d="M138,396 L162,396 L160,668 L140,668 Z" fill="#1C1C1E"/><path d="M150,400 L150,668" stroke="#000" stroke-opacity=".35"/>${L('M114,272 L186,272 C196,350 202,450 204,560 C204,610 200,650 196,668 L156,668 L152,400 L148,400 L144,668 L104,668 C100,650 96,610 96,560 C98,450 104,350 114,272 Z','#1C1C1E')}<path d="M130,280 C126,400 124,520 124,664 M170,280 C174,400 176,520 176,664" stroke="#38383D" stroke-width="1.2" fill="none"/></g>`},
+{id:'flare',name:'Satin flared trousers',brand:'Maison Ode',slot:'bottom',fit:'Flared',z:20,svg:`<g><path d="M138,416 L162,416 L164,668 L136,668 Z" fill="url(#blacksatin)"/><path d="M150,420 L150,668" stroke="#000" stroke-opacity=".35"/>${L('M116,272 L184,272 C190,330 186,400 180,480 C182,560 196,620 206,668 L156,668 L152,420 L148,420 L144,668 L94,668 C104,620 118,560 120,480 C114,400 110,330 116,272 Z','url(#blacksatin)')}<path d="M134,290 C132,420 128,540 118,660 M166,290 C168,420 172,540 182,660" stroke="#3A3A40" stroke-width="1.4" fill="none"/></g>`},
+{id:'ivorysatin',name:'Ivory satin wide trousers',brand:'Nuit Studio',slot:'bottom',fit:'Wide',z:20,svg:`<g><path d="M138,396 L162,396 L160,668 L140,668 Z" fill="url(#ivory)"/><path d="M150,400 L150,668" stroke="#CFC8B6"/>${L('M114,272 L186,272 C196,350 200,450 202,560 C203,610 200,650 198,668 L156,668 L152,400 L148,400 L144,668 L102,668 C100,650 97,610 98,560 C100,450 104,350 114,272 Z','url(#ivory)')}<path d="M132,282 C130,400 128,520 126,664 M168,282 C170,400 172,520 174,664" stroke="#D8D1C0" stroke-width="1.2" fill="none"/></g>`},
+{id:'cord',name:'Wide corduroy trousers',brand:'Olive & Oak',slot:'bottom',fit:'Wide',z:20,svg:`<g><path d="M136,396 L164,396 L164,670 L136,670 Z" fill="url(#cord)"/><path d="M150,400 L150,670" stroke="#3A2410" stroke-opacity=".6"/>${L('M112,272 L188,272 C202,350 210,450 212,560 C212,620 206,650 204,670 L158,670 L152,400 L148,400 L142,670 L96,670 C94,650 88,620 88,560 C90,450 98,350 112,272 Z','url(#cord)')}<path d="M122,284 Q136,296 146,284 M154,284 Q164,296 178,284" stroke="#5A3A1E" fill="none"/></g>`},
+{id:'jeans',name:'Washed barrel jeans',brand:'Common Thread',slot:'bottom',fit:'Baggy',z:20,svg:`<g><path d="M138,398 L162,398 L158,666 L142,666 Z" fill="url(#wash)"/><path d="M150,402 L150,666" stroke="#1A2030" stroke-opacity=".6"/>${L('M116,274 L184,274 C206,360 214,460 200,560 C194,610 188,640 186,666 L156,666 C160,560 158,460 150,400 C142,460 140,560 144,666 L114,666 C112,640 106,610 100,560 C86,460 94,360 116,274 Z','url(#wash)')}<path d="M122,290 Q136,300 146,290 M154,290 Q164,300 178,290" stroke="#5A6680" fill="none"/></g>`},
+{id:'cargo',name:'Parachute cargo pants',brand:'Haus Grey',slot:'bottom',fit:'Baggy',z:20,svg:`<g><path d="M138,396 L162,396 L160,660 L140,660 Z" fill="#8A8670"/><path d="M150,400 L150,660" stroke="#5E5A48"/>${L('M114,272 L186,272 C204,350 210,460 206,560 C204,620 198,640 194,660 L158,660 L152,400 L148,400 L142,660 L106,660 C102,640 96,620 94,560 C90,460 96,350 114,272 Z','#8A8670')}<rect x="98" y="420" width="26" height="40" fill="none" stroke="#6E6A56"/><rect x="176" y="420" width="26" height="40" fill="none" stroke="#6E6A56"/><path d="M106,648 L142,648 M158,648 L194,648" stroke="#6E6A56" stroke-width="3"/></g>`},
+{id:'straight',name:'Straight dark jeans',brand:'Common Thread',slot:'bottom',fit:'Fitted',z:20,svg:`<g><path d="M145,396 L155,396 L153,650 L147,650 Z" fill="#24304A"/><path d="M150,400 L150,650" stroke="#121A2C"/>${L('M114,272 L186,272 C192,300 192,330 190,350 C192,400 182,450 180,500 C178,550 176,600 172,650 L152,650 L151,400 L149,400 L148,650 L128,650 C124,600 122,550 120,500 C118,450 108,400 110,350 C108,330 108,300 114,272 Z','#24304A')}</g>`},
+{id:'skirt',name:'Pleated mini skirt',brand:'Studio Lune',slot:'bottom',fit:'A-line',z:20,svg:`<g>${L('M116,274 L184,274 L202,384 C170,394 130,394 98,384 Z','#F1E9D2','stroke="#D3C8A8"')}<path d="M128,276 L114,388 M139,276 L132,391 M150,276 L150,392 M161,276 L168,391 M172,276 L186,388" stroke="#D3C8A8"/></g>`},
+{id:'maxi',name:'Satin bias maxi skirt',brand:'Maison Ode',slot:'bottom',fit:'Flowing',z:20,svg:`<g>${L('M114,274 L186,274 C200,330 205,440 210,662 L90,662 C95,440 100,330 114,274 Z','url(#satin)')}</g>`},
+/* SHOES */
+{id:'boots',name:'Suede ankle boots',brand:'Vesper London',slot:'shoes',z:15,svg:`<g>${L('M128,592 L148,592 L148,660 C150,668 146,672 140,672 L123,672 C119,668 121,662 128,656 Z','#6E6A66')}${L('M152,592 L172,592 L172,656 C179,662 181,668 177,672 L160,672 C154,672 150,668 152,660 Z','#6E6A66')}</g>`},
+{id:'loafers',name:'Leather loafers',brand:'Atelier Nord',slot:'shoes',z:15,svg:`<g>${L('M129,646 L148,646 C150,656 149,666 144,670 C134,672 120,672 118,668 C120,660 126,654 129,646 Z','#111')}${L('M171,646 L152,646 C150,656 151,666 156,670 C166,672 180,672 182,668 C180,660 174,654 171,646 Z','#111')}</g>`},
+{id:'pumps',name:'Pointed pumps',brand:'Rêve Paris',slot:'shoes',z:15,svg:`<g>${L('M131,642 L147,642 C148,654 147,664 142,668 C134,670 120,670 118,666 C123,660 130,654 131,642 Z','#5A3A28')}${L('M169,642 L153,642 C152,654 153,664 158,668 C166,670 180,670 182,666 C177,660 170,654 169,642 Z','#5A3A28')}</g>`},
+{id:'sneakers',name:'Chunky trainers',brand:'Common Thread',slot:'shoes',z:15,svg:`<g>${L('M122,646 L148,646 C150,656 150,664 148,672 L116,672 C114,664 116,654 122,646 Z','#F4F2EC','stroke="#CFCAC0"')}${L('M178,646 L152,646 C150,656 150,664 152,672 L184,672 C186,664 184,654 178,646 Z','#F4F2EC','stroke="#CFCAC0"')}</g>`},
+{id:'warmers',name:'Faux-fur leg warmers',brand:'Olive & Oak',slot:'legs',z:22,svg:`<g fill="#D9C6A8" stroke="#BFA984"><path d="M122,560 q-4,8 0,14 q-5,8 0,14 q-5,8 0,14 q-5,8 0,14 q-4,8 2,16 L150,632 q4,-8 0,-14 q4,-8 0,-14 q5,-8 0,-14 q4,-8 0,-14 q4,-8 0,-14 Z"/><path d="M150,560 q-4,8 0,14 q-5,8 0,14 q-5,8 0,14 q-5,8 0,14 q-4,8 2,16 L178,632 q4,-8 0,-14 q4,-8 0,-14 q5,-8 0,-14 q4,-8 0,-14 q4,-8 0,-14 Z"/></g>`},
+/* BAGS */
+{id:'snake',name:'Python tote, tortoise handles',brand:'Maison Ode',slot:'bag',z:34,svg:`<g><path d="M70,412 C70,370 84,372 88,388 M104,412 C104,370 92,372 88,388" stroke="#8A4B1E" stroke-width="4" fill="none" stroke-dasharray="5 3"/>${L('M50,410 L110,410 L120,490 L40,490 Z','url(#snake)','stroke="#4A3F2C"')}<path d="M44,490 L116,490" stroke="#2A2418" stroke-width="3"/></g>`},
+{id:'bowling',name:'Worn leather bowling bag',brand:'Vesper London',slot:'bag',z:34,svg:`<g>${L('M200,396 C196,370 222,364 230,364 C254,366 262,382 258,400 C256,422 232,428 228,428 C204,426 200,414 200,396 Z','#3E2A1E')}<path d="M210,372 C214,346 244,346 248,372" stroke="#2A1C14" stroke-width="5" fill="none" stroke-linecap="round"/></g>`},
+{id:'tanbag',name:'Small leather holdall',brand:'Olive & Oak',slot:'bag',z:34,svg:`<g>${L('M196,392 C196,378 206,374 226,374 C246,374 254,380 254,394 L252,420 C240,426 210,426 198,420 Z','#9A5E32')}<path d="M206,378 C210,360 240,360 244,378" stroke="#7A4824" stroke-width="4" fill="none"/><path d="M198,396 L254,396" stroke="#7A4824"/></g>`},
+{id:'clutch',name:'Silver pouch clutch',brand:'Solenne Atelier*',slot:'bag',z:34,svg:`<g>${L('M58,382 C66,368 102,368 112,380 C120,396 108,414 86,414 C64,414 52,398 58,382 Z','url(#silver)','stroke="#8E8E92" stroke-width=".8"')}<path d="M66,384 C80,394 96,378 106,390" stroke="#FFFFFF" stroke-width="1.6" fill="none" opacity=".8"/></g>`},
+{id:'slouch',name:'Suede slouch bag',brand:'Maison Ode',slot:'bag',z:34,svg:`<g><path d="M108,168 C100,210 88,250 80,268" stroke="#B08A3E" stroke-width="3" fill="none" stroke-dasharray="4 3"/>${L('M56,272 C58,258 84,256 88,258 C112,262 114,282 112,300 C112,330 92,340 84,340 C60,334 54,310 56,272 Z','#A87A4E')}</g>`},
+{id:'mini',name:'Mini shoulder bag',brand:'Rêve Paris',slot:'bag',z:34,svg:`<g><path d="M192,166 L118,314" stroke="#141414" stroke-width="2"/><rect x="96" y="308" width="38" height="28" rx="5" fill="#141414"/><rect x="110" y="316" width="10" height="5" fill="#C9A85A"/></g>`},
+/* HATS */
+{id:'boater',name:'Wide straw boater',brand:'Solenne Atelier*',slot:'hat',z:40,svg:`<g><ellipse cx="150" cy="64" rx="74" ry="14" fill="#D8C27C" stroke="#BFA75E"/>${L('M122,62 L125,38 C140,32 160,32 175,38 L178,62 C160,66 140,66 122,62 Z','#D8C27C','stroke="#BFA75E"')}${L('M123,54 C140,58 160,58 177,54 L178,62 C160,66 140,66 122,62 Z','#EDE4A6')}<ellipse cx="150" cy="64" rx="62" ry="10" fill="none" stroke="#C9B26A" stroke-dasharray="2 3"/></g>`},
+{id:'beanie',name:'Grey knit beanie',brand:'Haus Grey',slot:'hat',z:40,svg:`<g>${L('M118,78 C114,40 136,32 150,32 C168,32 188,40 184,78 C160,70 140,70 118,78 Z','#A3A3A6')}${L('M116,72 C140,64 162,64 186,72 L186,84 C162,76 140,76 116,84 Z','#8E8E92')}</g>`},
+{id:'cap',name:'Cream newsboy cap',brand:'Olive & Oak',slot:'hat',z:40,svg:`<g>${L('M112,66 C116,38 140,32 152,32 C180,34 196,46 194,64 C160,56 136,58 112,66 Z','#ECE5D3','stroke="#CFC6AE"')}${L('M114,64 C140,54 170,54 192,62 C186,76 160,74 150,72 C128,74 118,74 114,64 Z','#E2D9C2','stroke="#CFC6AE"')}</g>`},
+{id:'baseball',name:'Washed navy cap',brand:'Common Thread',slot:'hat',z:40,svg:`<g>${L('M118,70 C118,40 136,34 150,34 C168,34 184,42 184,70 C160,64 140,64 118,70 Z','#22285E')}${L('M150,66 C170,63 196,66 208,74 C196,81 170,78 150,74 Z','#1A1F4E')}</g>`},
+/* ACCESSORIES */
+{id:'belt',name:'Black leather belt',brand:'Atelier Nord',slot:'belt',z:27,svg:`<g>${L('M119,273 C140,269 160,269 181,273 L181,286 C160,282 140,282 119,286 Z','#141414')}<rect x="142" y="270" width="16" height="17" fill="none" stroke="#BDBDBD" stroke-width="2.5"/></g>`},
+{id:'longbelt',name:'Long-tail leather belt',brand:'Vesper London',slot:'belt',z:27,svg:`<g>${L('M116,284 C140,280 160,280 184,284 L184,296 C160,292 140,292 116,296 Z','#7A4422')}<rect x="168" y="281" width="12" height="16" fill="none" stroke="#B48A3C" stroke-width="2"/><path d="M182,292 C196,330 190,380 198,440" stroke="#7A4422" stroke-width="6" fill="none" stroke-linecap="round"/></g>`},
+{id:'sash',name:'Navy satin sash',brand:'Nuit Studio',slot:'belt',z:27,svg:`<g>${L('M116,286 C140,280 160,280 184,286 L186,306 C160,300 140,300 114,306 Z','#1D2350')}${L('M172,300 C188,380 196,480 194,606 L178,610 C180,480 172,380 164,304 Z','#232A5E')}<ellipse cx="174" cy="300" rx="9" ry="7" fill="#161B44"/></g>`},
+{id:'gloves',name:'Long leather gloves',brand:'Vesper London',slot:'hands',z:32,svg:`<g>${L('M83,292 L104,296 C100,330 97,360 97,378 C99,398 95,406 88,406 C79,404 77,394 79,378 C79,350 81,320 83,292 Z','#151515')}${L('M217,292 L196,296 C200,330 203,360 203,378 C201,398 205,406 212,406 C221,404 223,394 221,378 C221,350 219,320 217,292 Z','#151515')}</g>`},
+{id:'shield',name:'Shield sunglasses',brand:'Rêve Paris',slot:'eyes',z:38,svg:`<g>${L('M118,78 C140,73 160,73 182,78 C184,92 176,99 166,99 C158,99 154,93 150,93 C146,93 142,99 134,99 C124,99 116,92 118,78 Z','#0F0F10')}<path d="M124,80 C136,78 146,78 150,80" stroke="#5A5A60" stroke-width="1.2" fill="none"/></g>`},
+{id:'orange',name:'Orange acetate glasses',brand:'Common Thread',slot:'eyes',z:38,svg:`<g><rect x="122" y="79" width="25" height="15" rx="6" fill="#F2B98C" opacity=".55" stroke="#D2601E" stroke-width="3.5"/><rect x="153" y="79" width="25" height="15" rx="6" fill="#F2B98C" opacity=".55" stroke="#D2601E" stroke-width="3.5"/><path d="M147,85 L153,85" stroke="#D2601E" stroke-width="3"/></g>`},
+{id:'glasses',name:'Tinted glasses',brand:'Studio Lune',slot:'eyes',z:38,svg:`<g><rect x="124" y="79" width="23" height="16" rx="5" fill="#6B4A2E" opacity=".55" stroke="#3A2616" stroke-width="2"/><rect x="153" y="79" width="23" height="16" rx="5" fill="#6B4A2E" opacity=".55" stroke="#3A2616" stroke-width="2"/><path d="M147,85 L153,85" stroke="#3A2616" stroke-width="2"/></g>`},
+{id:'beadnecklace',name:'Chunky bead necklace',brand:'Maison Ode',slot:'neck',z:36,svg:`<g>${beads(15,150,150,24,92,0.15*Math.PI,0.85*Math.PI,['#141414','#141414','#6E5A2E'],5)}${beads(11,150,150,16,62,0.18*Math.PI,0.82*Math.PI,['#141414','#7A6A3A'],4)}</g>`},
+{id:'cordpendant',name:'Cord and bead pendant',brand:'Nuit Studio',slot:'neck',z:36,svg:`<g><path d="M140,150 L148,236 M160,150 L152,236" stroke="#3A2A1E" stroke-width="1.2" fill="none"/><rect x="141" y="234" width="9" height="11" rx="3" fill="#F1E9D6" stroke="#CFC4A8"/><rect x="151" y="238" width="9" height="11" rx="3" fill="#F1E9D6" stroke="#CFC4A8"/></g>`},
+{id:'chains',name:'Layered chains',brand:'Atelier Nord',slot:'neck',z:36,svg:`<g fill="none" stroke="#8C8C8C" stroke-width="1.4"><path d="M140,150 Q150,182 160,150"/><path d="M138,150 Q150,202 162,150"/><path d="M136,150 Q150,224 164,150"/><rect x="146" y="192" width="8" height="10" fill="#555" stroke="#333"/><rect x="146.5" y="216" width="7" height="12" fill="#444" stroke="#222"/></g>`},
+{id:'pearls',name:'Pearl choker',brand:'Maison Ode',slot:'neck',z:36,svg:`<g fill="#F7F2E6" stroke="#D6CDB8" stroke-width=".6">${[...Array(9)].map((_,i)=>{const t=i/8, x=140+20*t, y=140+6*Math.sin(Math.PI*t); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6"/>`}).join('')}</g>`},
+{id:'squares',name:'Square gold earrings',brand:'Solenne Atelier*',slot:'ears',z:37,svg:`<g fill="#D4B25E" stroke="#A8873A"><rect x="114" y="96" width="9" height="12" rx="1.5"/><rect x="177" y="96" width="9" height="12" rx="1.5"/></g>`},
+{id:'hoops',name:'Gold hoops',brand:'Rêve Paris',slot:'ears',z:37,svg:`<g fill="none" stroke="#C9A85A" stroke-width="2"><circle cx="121" cy="104" r="7"/><circle cx="179" cy="104" r="7"/></g>`}
+];
+const CATS=[['Tops and dresses',['top','dress']],['Outerwear',['outer']],['Bottoms',['bottom']],['Shoes',['shoes','legs']],['Bags',['bag']],['Hats',['hat']],['Accessories',['belt','hands','eyes','neck','ears']]];
+const SHOW={'Tops and dresses':4,'Outerwear':3,'Bottoms':4,'Shoes':3,'Bags':3,'Hats':3,'Accessories':5};
+const LOOKS=[
+['Parisian evening',['skin','blazer','flare','longbelt','beadnecklace','shield','snake','loafers']],
+['Seventies suede',['navytee','bomber','cord','longbelt','orange','tanbag','boots']],
+['Downtown',['shirt','jeans','boots','beanie','chains','bowling']],
+['Sash and satin',['vknit','ivorysatin','sash','cordpendant','glasses','loafers']],
+['Sculptural',['sculpt','boater','squares','clutch','pumps']],
+['Minimal',['tank','trousers','belt','pumps','glasses','gloves','slouch']]
+];
+const worn={};
+const layers=document.getElementById('layers');
+const byId=id=>ITEMS.find(i=>i.id===id);
+function render(){
+  layers.innerHTML='';
+  Object.values(worn).map(byId).sort((a,b)=>a.z-b.z).forEach(it=>{
+    const g=document.createElementNS(NS,'g'); g.innerHTML=it.svg; g.classList.add('worn');
+    const t=document.createElementNS(NS,'title'); t.textContent=it.brand.replace('*','')+', '+it.name+' (tap to remove)'; g.appendChild(t);
+    g.addEventListener('click',()=>{delete worn[it.slot]; render();}); layers.appendChild(g);});
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('on',Object.values(worn).includes(c.dataset.id)));
+  const w=Object.values(worn).map(byId).sort((a,b)=>a.z-b.z);
+  document.getElementById('wearing').innerHTML='<b>Now wearing</b><br>'+(w.length?w.map(i=>`${i.brand.replace('*','')}: ${i.name}`).join(' · '):'<i>Nothing yet. Drag a piece onto the doll.</i>');
+}
+function wear(it){
+  if(it.slot==='dress'){delete worn.top; delete worn.bottom;}
+  if(it.slot==='top'||it.slot==='bottom') delete worn.dress;
+  worn[it.slot]=it.id; render();
+}
+function toggle(it){if(worn[it.slot]===it.id){delete worn[it.slot]; render();} else wear(it);}
+const clearAll=()=>Object.keys(worn).forEach(k=>delete worn[k]);
+const measure=document.createElementNS(NS,'svg'); measure.setAttribute('width','300'); measure.setAttribute('height','700'); measure.style.cssText='position:absolute;left:-9999px;top:0'; document.body.appendChild(measure);
+const vbCache={};
+function viewBoxFor(it){ if(vbCache[it.id]) return vbCache[it.id];
+  const g=document.createElementNS(NS,'g'); g.innerHTML=it.svg; measure.appendChild(g); const b=g.getBBox(); measure.removeChild(g);
+  const size=Math.max(b.width,b.height)+12; return vbCache[it.id]=`${b.x+b.width/2-size/2} ${b.y+b.height/2-size/2} ${size} ${size}`; }
+const shuffle=a=>{a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;};
+const wardrobe=document.getElementById('wardrobe');
+function buildWardrobe(){
+  wardrobe.innerHTML='';
+  CATS.forEach(([cat,slots])=>{
+    const pick=shuffle(ITEMS.filter(i=>slots.includes(i.slot))).slice(0,SHOW[cat]);
+    const h=document.createElement('div'); h.className='cat'; h.textContent=cat; wardrobe.appendChild(h);
+    const grid=document.createElement('div'); grid.className='grid'; wardrobe.appendChild(grid);
+    pick.forEach((it,k)=>{
+      const vb=viewBoxFor(it);
+      const card=document.createElement('div'); card.className='card'; card.dataset.id=it.id; card.tabIndex=0; card.style.animationDelay=(k*40)+'ms';
+      card.innerHTML=`<div class="num">${['I','II','III','IV','V'][k]}</div><div class="brand">${it.brand.replace('*','')}</div><svg viewBox="${vb}">${it.svg}</svg><div class="n">${it.name}</div>${it.fit?`<div class="fit">${it.fit}</div>`:''}`;
+      card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(it);}});
+      attachDrag(card,it,vb); grid.appendChild(card);
+    });
+  });
+  render();
+}
+const stage=document.getElementById('stage');
+const inStage=(x,y)=>{const r=stage.getBoundingClientRect(); return x>r.left&&x<r.right&&y>r.top&&y<r.bottom;};
+function attachDrag(card,it,vb){
+  card.addEventListener('pointerdown',e=>{
+    if(e.button!==0) return; e.preventDefault();
+    const sx=e.clientX, sy=e.clientY; let ghost=null;
+    const move=ev=>{
+      if(!ghost && Math.hypot(ev.clientX-sx,ev.clientY-sy)>5){
+        ghost=document.createElementNS(NS,'svg'); ghost.setAttribute('viewBox',vb); ghost.classList.add('ghost'); ghost.innerHTML=it.svg; document.body.appendChild(ghost); document.body.style.cursor='grabbing';}
+      if(ghost){ghost.style.left=ev.clientX+'px'; ghost.style.top=ev.clientY+'px'; stage.classList.toggle('over',inStage(ev.clientX,ev.clientY));}
+    };
+    const up=ev=>{
+      window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up);
+      document.body.style.cursor=''; stage.classList.remove('over');
+      if(ghost){ghost.remove(); if(inStage(ev.clientX,ev.clientY)) wear(it);}
+      else toggle(it);
+    };
+    window.addEventListener('pointermove',move); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+  });
+}
+const looksEl=document.getElementById('looks');
+LOOKS.forEach(([name,ids])=>{const b=document.createElement('button'); b.textContent=name; b.onclick=()=>{clearAll(); ids.forEach(id=>wear(byId(id)));}; looksEl.appendChild(b);});
+document.getElementById('refresh').onclick=buildWardrobe;
+document.getElementById('reset').onclick=()=>{clearAll(); render();};
+document.getElementById('surprise').onclick=()=>{
+  clearAll();
+  const pick=s=>shuffle(ITEMS.filter(i=>i.slot===s))[0];
+  if(Math.random()<.15){wear(pick('dress'));}
+  else{
+    const baggy=Math.random()<.5;
+    wear(shuffle(ITEMS.filter(i=>i.slot==='top'&&(baggy?i.fit==='Oversized':i.fit==='Fitted')))[0]);
+    wear(shuffle(ITEMS.filter(i=>i.slot==='bottom'&&(baggy?['Fitted','A-line','Flowing'].includes(i.fit):['Wide','Baggy','Flared'].includes(i.fit))))[0]);
+    if(Math.random()<.4) wear(pick('outer'));
+  }
+  wear(pick('shoes'));
+  ['bag','hat','neck','eyes','belt','ears'].forEach(s=>{if(Math.random()<.45){const p=pick(s); if(p) wear(p);}});
+};
+buildWardrobe();
+</script>
+</body>
+</html>
